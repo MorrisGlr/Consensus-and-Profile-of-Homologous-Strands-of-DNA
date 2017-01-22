@@ -1,13 +1,8 @@
-#I will be comparing multiple strands of DNA that are the same length.
-#I will have to make a profile on how many times a nucleotide is called
-#at a given postion in the DNA string.
 #The profile is created by making 4 lists that correspond to a nucleotide
-#I will have to count how many times a given nucleotide is called at any
+#One will have to count how many times a given nucleotide is called at any
 #given postion.
 #if a nucleotide has the most hits for a given position then it will be the
 #the consensus nucleotide.
-#it is possible that there is more than one consensus nucleotide so I will
-#have to make room for that possibility.a
 file = open('rosalind_cons.txt','r')
 raw = file.readlines()
 data = []
@@ -26,57 +21,27 @@ for i in data:
 for i in fastanames:
     index = data.index(i)
     fastanamesindexes.append(index)
-###the above block of code to identify the names of the sequences and to locate
-#the names in the data list via their corresponding indexes this will be
-#important for sorting between name info and actual corresponding sequencing info
-#I will be manipulating the index lists while conserving the original data set list
-#
+
 
 dict ={}
-for i in fastanamesindexes:             ###scan through all of the name indexes list
-                                        #this calls the name of dict key that I want to
-                                        #add seq data to for one cycle of the for loop
-                                        ###
-    y = data[i]                         #call the name by index in the original data set
-    dict[y]={'seq':''}  #the general structure of the embedded dictionary
-                                        #and it will iterate through each seq name
-                                        ###
-    dataindexes.pop(0)                  ###gets rid of first list item called index from
-                                        #dataindexes, in this case it is the name indexes
-                                        #for origanl data we do not want the first name to#
-                                        #iterate in the upcoming for loop because within
-                                        #that loop, name related indexes break out of the
-                                        #for loop and then I do not end up inserting seq
-                                        #data into the dict
-                                        ###
-    countforpop = 0                     #variable that is used to count the number of loops
-                                        #in the for loop below it. This becomes useful in
-                                        #getting rid of the data indexes that are correlated
-                                        #with seqdata. Think of it as scratching off an item
-                                        #in a to do list, you do not want to redo the task
-    for i in dataindexes:               #iterate through the remaining data indexes that have
-                                        #not been popped off yet
-        if i not in fastanamesindexes:  #this checks if an index corresponds to a seq name
-                                        #which is not what we want to add to the 'seq section'
-                                        #for the name
-                                        ###
+for i in fastanamesindexes:             
+    y = data[i]                         
+    dict[y]={'seq':''}                                  
+    dataindexes.pop(0)                  
+    countforpop = 0                     
+    for i in dataindexes:               
+        if i not in fastanamesindexes:  
             dict[y]['seq'] = (dict[y]['seq']) + data[i]
-            countforpop +=1             #each time a seq item gets tacked onto the seq key the
-                                        #the counter increases by 1 becuase I need to count how
-                                        #how many items in the list I need to get rid of/ cross
-                                        #off my list
+            countforpop +=1             
             continue
         if i in fastanamesindexes:
             for i in range(0,countforpop):
-                dataindexes.pop(0)      ###the for loop iterates the same number of for loop
-                                        #cycles. I do this only when an index that correlates to
-                                        #a name gets interating in the for loop because I want
-                                        #to move onto the next name and overarching dict key
-                                        #which will be the next seq name. Adding the pop function
-                                        #in the 'if' condition of the for loop will mess up the
-                                        #iteration and skip all around. It is hard to explain.
+                dataindexes.pop(0)      .
             break
-
+#The three blocks of code above were used to convert the text file with a FASTA format into a dictionary
+#data type. The name of the sequence is the dictionary key and the value is the DNA sequence.
+#SEE my "Computing GC Content" repository for the python code that has a thorough annotation of the blocks
+#of code above.
 
 
 A = []                              # I made empty lists that correspond to nucleotide that is being
@@ -103,7 +68,7 @@ for i in dict:                      #This scans through very dictionary key
             else:
                 A[i] +=1
         elif nucleotide == 'T':
-            if len(T) < len(seq):
+            if len(T) < len(seq):   #This code could be cleaned up by defining a function that appends the 0s.
                 T.append(0)
                 A.append(0)
                 C.append(0)
@@ -152,17 +117,17 @@ for i in range(0,len(A)):                         #note: make an empty list of f
 
 
 
-print(''.join(ConsensusSeq))        #I need to convert the number list into string items before I can
-for i in A:
-    indexref = A.index(i)               #use the "join" function
+print(''.join(ConsensusSeq))        #I need to convert the number list into string items before I can use 
+for i in A:                         #the "join" function.
+    indexref = A.index(i)               
     A[indexref] = str(i)
 for i in T:
     indexref = T.index(i)
     T[indexref] = str(i)
 for i in G:
-    indexref = G.index(i)               #use the "join" function
+    indexref = G.index(i)               
     G[indexref] = str(i)
 for i in C:
-    indexref = C.index(i)               #use the "join" function
+    indexref = C.index(i)               
     C[indexref] = str(i)
 print('A: '+ ' '.join(A)+'\n'+ 'C: ' + ' '.join(C) + '\n'+ 'G: '+' '.join(G) + '\n'+ 'T: '+' '.join(T))
